@@ -54,4 +54,21 @@ namespace GPT_Assistant
         public string content { get; set; }
     }
 
+
+
+    public class TTSModelRequest
+    {
+        public Stream Audio { get; set; }
+        public string file { get; set; }
+        public string model { get; set; }
+        public string language { get; set; }
+    }
+
+
+    public class TTSModelResponse
+    {
+        public string text { get; set; }
+    }
+
+
 }
