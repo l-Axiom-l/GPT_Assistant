@@ -27,21 +27,23 @@ namespace OpenAI
             this.apikey = apikey;
         }
 
-        public async Task<string> Ask(string prompt)
+        public async Task<string> Ask(string prompt, List<Message> chat = null)
         {
             string uri = "https://api.openai.com/v1/chat/completions";
             HttpResponseMessage response;
+
+            if(chat == null) chat = new List<Message>();
 
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apikey);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                Message mes = new Message() {role = "user", content = prompt };
+                chat.Add(new Message() {role = "user", content = prompt });
                 RequestModel request = new RequestModel()
                 {
                     model = "gpt-3.5-turbo",
-                    messages = new Message[] {mes}
+                    messages = chat.ToArray(),
                 };
                 HttpContent content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
                 response = await client.PostAsync(uri, content);
